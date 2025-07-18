@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     messages: [
       {
         role: "user",
-        content: message,
+        content: "genrate a todo app in react",
       },
     ],
     system: getSystemPrompt(),
