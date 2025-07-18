@@ -1,18 +1,22 @@
+"use client";
 import { WebContainer } from '@webcontainer/api';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface PreviewFrameProps {
   files: any[];
-  webContainer: WebContainer;
+  webContainer: WebContainer | undefined;
 }
 
 export function PreviewFrame({ files, webContainer }: PreviewFrameProps) {
-  // In a real implementation, this would compile and render the preview
   const [url, setUrl] = useState("");
+  const devServerStarted = useRef(false);
 
   async function main() {
-    const installProcess = await webContainer.spawn('npm', ['install']);
+    if (!webContainer) return; // <-- Fix: wait for webContainer to be ready
+    if (devServerStarted.current) return;
+    devServerStarted.current = true;
 
+    const installProcess = await webContainer.spawn('npm', ['install']);
     installProcess.output.pipeTo(new WritableStream({
       write(data) {
         console.log(data);
@@ -21,9 +25,7 @@ export function PreviewFrame({ files, webContainer }: PreviewFrameProps) {
 
     await webContainer.spawn('npm', ['run', 'dev']);
 
-    // Wait for `server-ready` event
     webContainer.on('server-ready', (port, url) => {
-      // ...
       console.log(url)
       console.log(port)
       setUrl(url);
@@ -31,8 +33,10 @@ export function PreviewFrame({ files, webContainer }: PreviewFrameProps) {
   }
 
   useEffect(() => {
-    main()
-  }, [])
+    main();
+    // Optionally, add webContainer as a dependency if it can change
+  }, []);
+
   return (
     <div className="h-full flex items-center justify-center text-gray-400">
       {!url && <div className="text-center">
