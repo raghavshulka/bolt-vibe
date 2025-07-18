@@ -45,6 +45,7 @@ import '../../app/globals.css'
             ...x,
             status: "pending"
         })));
+     
 
         setLoading(true);
         const stepsResponse = await axios.post(`/api/chats`, {
@@ -124,6 +125,7 @@ import '../../app/globals.css'
             setFiles(originalFiles)
             setSteps(steps => steps.map((s: Step) => {
                 return {
+                    key: s.id,
                     ...s,
                     status: "completed"
                 }
