@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     messages: [
       {
         role: "user",
-        content: "genrate a todo app in react",
+        content: message,
       },
     ],
     system: `You are a strict classifier. Your job is to look at the user's message and return ONLY one of these words: "node", "react", or "nextjs".
