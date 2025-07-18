@@ -27,9 +27,14 @@ npm install
 npm run dev
 ```
 
-how do i make it
-I used vercel ai sdk with groq model then get the prompt from bolt ai and create two routes first route check for templat and other do create it ex like create next todo app in reat so react is template and todo is whst it have to make
-then use webcontainer api to create the project create a filesystem in which i pass the data and show it and webcontainer api help the project to run it and show the output in the browser
+### how do i make it
+
+I used  Vercel AI SDK with the Groq model, then got the prompt from Bolt AI and created two routes. The first route checks for the template, and the second one creates it.
+For example: “Create a Next.js todo app in React” — here, React is the template, and todo is what it has to build.
+
+Then ,  I creates a file system where I pass the data and display it.  I used the WebContainer API . The WebContainer API helps run the project and shows the output in the browser.
+
+
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
