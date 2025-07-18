@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { StepsList } from "../../components/StepsList"
 import { FileExplorer } from "../../components/FileExplorer"
@@ -341,4 +341,10 @@ import "../../app/globals.css"
   )
 }
 
-export default Builder
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Builder />
+    </Suspense>
+  );
+}
