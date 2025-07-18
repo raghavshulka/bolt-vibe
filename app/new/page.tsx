@@ -17,7 +17,7 @@ import '../../app/globals.css'
     const searchParams = useSearchParams();
     const prompt = searchParams.get('prompt') || '';
     const [userPrompt, setPrompt] = useState("");
-    const [llmMessages, setLlmMessages] = useState<{ role: "user" | "assistant", content: string; }[]>([]);
+    const [llmMessages, setLlmMessages] = useState<{ role: "user" | "assistant", message: string; }[]>([]);
     const [loading, setLoading] = useState(false);
     const [templateSet, setTemplateSet] = useState(false);
     const webcontainer = useWebContainer();
@@ -50,7 +50,7 @@ import '../../app/globals.css'
         const stepsResponse = await axios.post(`/api/chats`, {
             messages: [...prompts, prompt].map(content => ({
                 role: "user",
-                content
+                message: content
             }))
         })
 
@@ -63,10 +63,10 @@ import '../../app/globals.css'
 
         setLlmMessages([...prompts, prompt].map(content => ({
             role: "user",
-            content
+            message: content
         })));
 
-        setLlmMessages(x => [...x, { role: "assistant", content: stepsResponse.data.response }])
+        setLlmMessages(x => [...x, { role: "assistant", message: stepsResponse.data.response }])
     }
 
     useEffect(() => {
@@ -215,7 +215,7 @@ import '../../app/globals.css'
                                         <button onClick={async () => {
                                             const newMessage = {
                                                 role: "user" as "user",
-                                                content: userPrompt
+                                                message: userPrompt
                                             };
 
                                             setLoading(true);
@@ -227,7 +227,7 @@ import '../../app/globals.css'
                                             setLlmMessages(x => [...x, newMessage]);
                                             setLlmMessages(x => [...x, {
                                                 role: "assistant",
-                                                content: stepsResponse.data.response
+                                                message: stepsResponse.data.response
                                             }]);
 
                                             setSteps(s => [...s, ...parseXml(stepsResponse.data.response).map(x => ({
