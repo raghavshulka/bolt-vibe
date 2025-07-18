@@ -1,53 +1,87 @@
-'use client'
-import  { useState } from 'react';
-import { Wand2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+"use client"
+import { useState } from "react"
+import type React from "react"
 
- const Home = () => {
-  const [prompt, setPrompt] = useState('');
-  const router = useRouter();
+import { Wand2, Sparkles, Code2, Zap, ArrowRight } from "lucide-react"
+import { useRouter } from "next/navigation"
+
+const Home = () => {
+  const [prompt, setPrompt] = useState("")
+  const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (prompt.trim()) {
-    router.push(`/new?prompt=${encodeURIComponent(prompt)}`);
+      router.push(`/new?prompt=${encodeURIComponent(prompt)}`)
     }
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <Wand2 className="w-12 h-12 text-blue-400" />
-          </div>
-          <h1 className="text-4xl font-bold text-gray-100 mb-4">
-            Website Builder AI
-          </h1>
-          <p className="text-lg text-gray-300">
-            Describe your dream website, and we'll help you build it step by step
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-gray-800 rounded-lg shadow-lg p-6">
-            <textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Describe the website you want to build..."
-              className="w-full h-32 p-4 bg-gray-900 text-gray-100 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder-gray-500"
-            />
-            <button
-              type="submit"
-              className="w-full mt-4 bg-blue-600 text-gray-100 py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-            >
-              Generate Website Plan
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
   }
 
-export default Home;
+  return (
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
+        <div className="max-w-4xl w-full">
+          {/* Header Section */}
+          <div className="text-center mb-12">
+            <h1 className="text-6xl font-bold text-foreground mb-6">bolt-vibe</h1>
+
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+              Transform your ideas into beautiful, functional websites with the power of AI. Describe your vision, and
+              watch it come to life.
+            </p>
+
+            {/* Feature Pills */}
+            <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex items-center gap-2 bg-card border border-border rounded-full px-4 py-2 shadow-sm">
+                <Code2 className="w-4 h-4 text-primary" />
+                <span className="text-sm text-card-foreground">Smart Code Generation</span>
+              </div>
+              <div className="flex items-center gap-2 bg-card border border-border rounded-full px-4 py-2 shadow-sm">
+                <Sparkles className="w-4 h-4 text-primary" />
+                <span className="text-sm text-card-foreground">AI-Powered Design</span>
+              </div>
+              <div className="flex items-center gap-2 bg-card border border-border rounded-full px-4 py-2 shadow-sm">
+                <Zap className="w-4 h-4 text-primary" />
+                <span className="text-sm text-card-foreground">Instant Preview</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Form */}
+          <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl  mx-auto">
+            <div className="relative">
+              <div className="bg-card border border-border rounded-lg p-4 shadow-lg">
+                <div className="">
+                  <div className="relative">
+                    <textarea
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      placeholder="(e.g., 'hello world app in react')"
+                      className="w-full h-30  p-6 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-300 resize-none placeholder:text-muted-foreground text-lg leading-relaxed text-foreground pr-12"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!prompt.trim()}
+                      className="absolute bottom-3 right-3 bg-primary text-primary-foreground rounded-full p-2 shadow-md hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center"
+                      style={{ width: 36, height: 36 }}
+                      aria-label="Send"
+                    >
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Home

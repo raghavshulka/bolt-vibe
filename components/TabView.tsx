@@ -1,36 +1,38 @@
-import React from 'react';
-import { Code2, Eye } from 'lucide-react';
+"use client"
+
+import type React from "react"
+import { Code, Eye } from "lucide-react"
 
 interface TabViewProps {
-  activeTab: 'code' | 'preview';
-  onTabChange: (tab: 'code' | 'preview') => void;
+  activeTab: "code" | "preview"
+  onTabChange: (tab: "code" | "preview") => void
 }
 
-export function TabView({ activeTab, onTabChange }: TabViewProps) {
+export const TabView: React.FC<TabViewProps> = ({ activeTab, onTabChange }) => {
   return (
-    <div className="flex space-x-2 mb-4">
+    <div className="flex border-b border-border">
       <button
-        onClick={() => onTabChange('code')}
-        className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-          activeTab === 'code'
-            ? 'bg-gray-700 text-gray-100'
-            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800'
+        onClick={() => onTabChange("code")}
+        className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
+          activeTab === "code"
+            ? "text-foreground border-b-2 border-primary bg-accent/30"
+            : "text-muted-foreground hover:text-foreground hover:bg-accent/20"
         }`}
       >
-        <Code2 className="w-4 h-4" />
-        Code
+        <Code className="w-4 h-4" />
+        Code Editor
       </button>
       <button
-        onClick={() => onTabChange('preview')}
-        className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-          activeTab === 'preview'
-            ? 'bg-gray-700 text-gray-100'
-            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800'
+        onClick={() => onTabChange("preview")}
+        className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
+          activeTab === "preview"
+            ? "text-foreground border-b-2 border-primary bg-accent/30"
+            : "text-muted-foreground hover:text-foreground hover:bg-accent/20"
         }`}
       >
         <Eye className="w-4 h-4" />
         Preview
       </button>
     </div>
-  );
+  )
 }

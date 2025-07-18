@@ -1,42 +1,55 @@
-import React from 'react';
-import { CheckCircle, Circle, Clock } from 'lucide-react';
-import { Step } from '../lib/ts';
+"use client"
+
+import type React from "react"
+import { Check, Clock, Play } from "lucide-react"
+import type { Step } from "../lib/ts"
 
 interface StepsListProps {
-  steps: Step[];
-  currentStep: number;
-  onStepClick: (stepId: number) => void;
+  steps: Step[]
+  currentStep: number
+  onStepClick: (step: number) => void
 }
 
-export function StepsList({ steps, currentStep, onStepClick }: StepsListProps) {
+export const StepsList: React.FC<StepsListProps> = ({ steps, currentStep, onStepClick }) => {
+  const getStepIcon = (status: string, index: number) => {
+    if (status === "completed") {
+      return <Check className="w-4 h-4 text-chart-4" />
+    } else if (status === "pending") {
+      return <Clock className="w-4 h-4 text-chart-5" />
+    } else {
+      return <Play className="w-4 h-4 text-muted-foreground" />
+    }
+  }
+
+  const getStepBorderColor = (status: string) => {
+    if (status === "completed") return "border-chart-4/30 bg-chart-4/5"
+    if (status === "pending") return "border-chart-5/30 bg-chart-5/5"
+    return "border-border bg-muted/20"
+  }
+
   return (
-    <div className="bg-gray-900 rounded-lg shadow-lg p-4 h-full overflow-auto">
-      <h2 className="text-lg font-semibold mb-4 text-gray-100">Build Steps</h2>
-      <div className="space-y-4">
-        {steps.map((step) => (
-          <div
-            key={step.id}
-            className={`p-1 rounded-lg cursor-pointer transition-colors ${
-              currentStep === step.id
-                ? 'bg-gray-800 border border-gray-700'
-                : 'hover:bg-gray-800'
-            }`}
-            onClick={() => onStepClick(step.id)}
-          >
-            <div className="flex items-center gap-2">
-              {step.status === 'completed' ? (
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              ) : step.status === 'in-progress' ? (
-                <Clock className="w-5 h-5 text-blue-400" />
-              ) : (
-                <Circle className="w-5 h-5 text-gray-600" />
+    <div className="space-y-3">
+      {steps.map((step, index) => (
+        <div
+          key={index}
+          onClick={() => onStepClick(index + 1)}
+          className={`p-4 rounded-lg border cursor-pointer transition-all duration-200 hover:bg-accent/30 ${getStepBorderColor(step.status)}`}
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 mt-0.5">{getStepIcon(step.status, index)}</div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-sm font-medium text-foreground truncate">{step.title}</h3>
+              {step.description && (
+                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{step.description}</p>
               )}
-              <h3 className="font-medium text-gray-100">{step.title}</h3>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-xs px-2 py-1 bg-muted text-muted-foreground rounded">Step {index + 1}</span>
+                {step.status === "completed" && <span className="text-xs text-chart-4">✓ Done</span>}
+              </div>
             </div>
-            <p className="text-sm text-gray-400 mt-2">{step.description}</p>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
-  );
+  )
 }

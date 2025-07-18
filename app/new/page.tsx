@@ -1,17 +1,18 @@
-'use client'
-import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { StepsList } from '../../components/StepsList';
-import { FileExplorer } from '../../components/FileExplorer';
-import { TabView } from '../../components/TabView';
-import { CodeEditor } from '../../components/CodeEditor';
-import { PreviewFrame } from '../../components/PreviewFrame';
-import { Step, FileItem, StepType } from '../../lib/ts';
-import { parseXml } from '../../lib/steps';
-import { useWebContainer } from '../../hooks/usewebContainerHook';
-import { Loader } from '../../components/Loader';
-import axios from 'axios';
-import '../../app/globals.css'
+"use client"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { StepsList } from "../../components/StepsList"
+import { FileExplorer } from "../../components/FileExplorer"
+import { TabView } from "../../components/TabView"
+import { CodeEditor } from "../../components/CodeEditor"
+import { PreviewFrame } from "../../components/PreviewFrame"
+import { type Step, type FileItem, StepType } from "../../lib/ts"
+import { parseXml } from "../../lib/steps"
+import { useWebContainer } from "../../hooks/usewebContainerHook"
+import { Loader } from "../../components/Loader"
+import { Send, Sparkles, Code2, FolderOpen } from "lucide-react"
+import axios from "axios"
+import "../../app/globals.css"
 
  const Builder = () => {
     const searchParams = useSearchParams();
@@ -188,33 +189,77 @@ import '../../app/globals.css'
         init();
     }, [])
 
-    return (
-        <div className="min-h-screen bg-gray-900 flex flex-col">
-            <header className="bg-gray-800 border-b border-gray-700 px-6 py-4">
-                <h1 className="text-xl font-semibold text-gray-100">Website Builder</h1>
-                <p className="text-sm text-gray-400 mt-1">Prompt: {prompt}</p>
-            </header>
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Sophisticated Header */}
+      <header className="bg-card border-b border-border shadow-sm backdrop-blur-sm">
+        <div className="">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-primary/20 rounded-xl blur-sm" />
+              </div>
+              <div className="">
+                <h1 className="text-2xl font-bold text-foreground">bolt-vibe</h1>
+                <p className="text-sm text-muted-foreground max-w-2xl truncate">
+                  Building: <span className="text-foreground font-medium">{prompt}</span>
+                </p>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+      </header>
 
-            <div className="flex-1 overflow-hidden">
-                <div className="h-full grid grid-cols-4 gap-6 p-6">
-                    <div className="col-span-1 space-y-6 overflow-auto">
-                        <div>
-                            <div className="max-h-[75vh] overflow-scroll">
-                                <StepsList
-                                    steps={steps}
-                                    currentStep={currentStep}
-                                    onStepClick={setCurrentStep}
-                                />
-                            </div>
-                            <div>
-                                <div className='flex'>
-                                    <br />
-                                    {(loading || !templateSet) && <Loader />}
-                                    {!(loading || !templateSet) && <div className='flex'>
-                                        <textarea value={userPrompt} onChange={(e) => {
-                                            setPrompt(e.target.value)
-                                        }} className='p-2 w-full'></textarea>
-                                        <button onClick={async () => {
+      {/* Main Content Area */}
+      <div className=" bg-background">
+        <div className=" grid grid-cols-12 gap-8 p-4">
+          {/* Left Panel - Steps & Chat */}
+          <div className="col-span-3 space-y-4">
+            {/* Build Steps Section */}
+            <div className="bg-card border border-border rounded-xl shadow-lg ">
+              <div className="px-6 py-4 border-b border-border bg-accent/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                  <h2 className="text-lg font-semibold text-foreground">Build Steps</h2>
+                  <div className="ml-auto text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                    {steps.filter((s) => s.status === "completed").length}/{steps.length}
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 max-h-[50vh] overflow-auto">
+                <StepsList steps={steps} currentStep={currentStep} onStepClick={setCurrentStep} />
+              </div>
+            </div>
+
+            {/* Chat Interface */}
+            <div className="bg-card border border-border rounded-xl shadow-lg overflow-hidden">
+              <div className="px-6 py-4 border-b border-border bg-accent/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-chart-1 rounded-full" />
+                  <h3 className="text-lg font-semibold text-foreground">Continue Building</h3>
+                </div>
+              </div>
+              <div className="p-6">
+                {loading || !templateSet ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <textarea
+                        value={userPrompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        placeholder="Describe additional features or modifications..."
+                        className="w-full p-4 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 resize-none text-foreground placeholder:text-muted-foreground min-h-[120px]"
+                        rows={4}
+                      />
+                      <div className="absolute bottom-3 right-3 text-xs text-muted-foreground">
+                        {userPrompt.length}/500
+                      </div>
+                    </div>
+                    <button onClick={async () => {
                                             const newMessage = {
                                                 role: "user" as "user",
                                                 message: userPrompt
@@ -237,32 +282,63 @@ import '../../app/globals.css'
                                                 status: "pending" as "pending"
                                             }))]);
 
-                                        }} className='bg-purple-400 px-4'>Send</button>
-                                    </div>}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-span-1">
-                        <FileExplorer
-                            files={files}
-                            onFileSelect={setSelectedFile}
-                        />
-                    </div>
-                    <div className="col-span-2 bg-gray-900 rounded-lg shadow-lg p-4 h-[calc(100vh-8rem)]">
-                        <TabView activeTab={activeTab} onTabChange={setActiveTab} />
-                        <div className="h-[calc(100%-4rem)]">
-                            {activeTab === 'code' ? (
-                                <CodeEditor file={selectedFile} />
-                            ) : (
-                                <PreviewFrame webContainer={webcontainer!} files={files} />
-                            )}
-                        </div>
-                    </div>
-                </div>
+                                        }} >Send</button>
+                  </div>
+                )}
+              </div>
             </div>
+          </div>
+
+          {/* Middle Panel - File Explorer */}
+          <div className="col-span-3">
+            <div className="bg-card border border-border rounded-xl shadow-lg overflow-hidden h-full">
+              <div className="px-6 py-4 border-b border-border bg-accent/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-chart-2 rounded-full" />
+                  <h2 className="text-lg font-semibold text-foreground">Project Files</h2>
+                  <div className="ml-auto">
+                    <FolderOpen className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 h-[calc(100%-4rem)] overflow-auto">
+                <FileExplorer files={files} onFileSelect={setSelectedFile} />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Panel - Code Editor & Preview */}
+          <div className="col-span-6">
+            <div className="bg-card border border-border rounded-xl shadow-lg overflow-hidden h-full">
+              <div className="border-b border-border bg-accent/20">
+                <div className="px-6 py-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 bg-chart-3 rounded-full" />
+                      <h2 className="text-lg font-semibold text-foreground">Code Workspace</h2>
+                    </div>
+                    {selectedFile && (
+                      <div className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                        {selectedFile.name}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <TabView activeTab={activeTab} onTabChange={setActiveTab} />
+              </div>
+              <div className="h-[calc(100%-8rem)]">
+                {activeTab === "code" ? (
+                  <CodeEditor file={selectedFile} />
+                ) : (
+                  <PreviewFrame webContainer={webcontainer!} files={files} />
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  )
 }
 
-export default Builder;
+export default Builder
