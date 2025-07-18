@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# bolt-vibe + t3chat theme
+
+**AI-Powered Website & Code Generator**
+
+bolt-vibe enables you to turn your ideas into beautiful, functional websites and code projects using the power of AI. Just describe your vision in natural language, and watch it come to life with smart code generation, AI-powered design, and instant preview—all in your browser.
+
+## Features
+
+- ✨ Generate full-stack web projects from a simple prompt
+- ⚡️ Instant code preview and editing in the browser
+- 🧠 AI-powered design and code suggestions
+- 🗂️ File explorer and code editor UI
+- 🏗️ Supports React, Next.js, and Node.js project templates
+- 🖥️ Runs fully in-browser using WebContainer (no backend required for code execution)
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+how do i make it
+I used vercel ai sdk with groq model then get the prompt from bolt ai and create two routes first route check for templat and other do create it ex like create next todo app in reat so react is template and todo is whst it have to make
+then use webcontainer api to create the project create a filesystem in which i pass the data and show it and webcontainer api help the project to run it and show the output in the browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Usage
 
-## Learn More
+1. On the home page, enter a description of your desired website or app (e.g., "hello world app in react").
+2. Click the send arrow or press Enter.
+3. The AI will generate a project plan, code files, and a live preview.
+4. Explore and preview your project instantly.
 
-To learn more about Next.js, take a look at the following resources:
+## How It Works
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- The app uses the Vercel AI SDK with the Groq model to process your prompt.
+- The prompt is analyzed to determine the project template (e.g., React, Next.js, Node.js) and the specific task (e.g., "todo app").
+- Two API routes are used:
+  - One to classify and select the appropriate template.
+  - Another to generate the project files and plan based on your request.
+- The WebContainer API is used to create a virtual filesystem and run the generated project entirely in your browser, providing a live preview and interactive code editing experience.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- [Next.js](https://nextjs.org/) (App Router, Client Components)
+- [WebContainer API](https://webcontainers.io/) (in-browser Node.js runtime)
+- [Vercel AI SDK (Groq)](https://sdk.vercel.ai/) (AI code generation)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
