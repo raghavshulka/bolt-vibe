@@ -21,7 +21,7 @@ import "../../app/globals.css"
     const [llmMessages, setLlmMessages] = useState<{ role: "user" | "assistant", message: string; }[]>([]);
     const [loading, setLoading] = useState(false);
     const [templateSet, setTemplateSet] = useState(false);
-    const webcontainer = useWebContainer();
+    const { webcontainer, isBooting: isWebContainerBooting } = useWebContainer();
 
     const [currentStep, setCurrentStep] = useState(1);
     const [activeTab, setActiveTab] = useState<'code' | 'preview'>('code');
@@ -137,6 +137,11 @@ import "../../app/globals.css"
     }, [steps, files]);
 
     useEffect(() => {
+        // Only mount if WebContainer is ready and we have files
+        if (!webcontainer || files.length === 0) {
+            return;
+        }
+
         const createMountStructure = (files: FileItem[]): Record<string, any> => {
             const mountStructure: Record<string, any> = {};
 
@@ -179,8 +184,10 @@ import "../../app/globals.css"
         const mountStructure = createMountStructure(files);
 
         // Mount the structure if WebContainer is available
-        console.log(mountStructure);
-        webcontainer?.mount(mountStructure);
+        console.log('Mounting files to WebContainer:', mountStructure);
+        webcontainer.mount(mountStructure).catch((error) => {
+            console.error('Failed to mount files to WebContainer:', error);
+        });
     }, [files, webcontainer]);
 
    
@@ -203,6 +210,9 @@ import "../../app/globals.css"
                 <h1 className="text-2xl font-bold text-foreground">bolt-vibe</h1>
                 <p className="text-sm text-muted-foreground max-w-2xl truncate">
                   Building: <span className="text-foreground font-medium">{prompt}</span>
+                  {isWebContainerBooting && (
+                    <span className="ml-2 text-xs text-primary">(Initializing runtime...)</span>
+                  )}
                 </p>
               </div>
             </div>
@@ -330,7 +340,20 @@ import "../../app/globals.css"
                 {activeTab === "code" ? (
                   <CodeEditor file={selectedFile} />
                 ) : (
-                  <PreviewFrame webContainer={webcontainer!} files={files} />
+                  isWebContainerBooting ? (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center">
+                        <Loader />
+                        <p className="mt-4 text-sm text-muted-foreground">Initializing WebContainer...</p>
+                      </div>
+                    </div>
+                  ) : webcontainer ? (
+                    <PreviewFrame webContainer={webcontainer} files={files} />
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <p className="text-sm text-muted-foreground">WebContainer not available</p>
+                    </div>
+                  )
                 )}
               </div>
             </div>
